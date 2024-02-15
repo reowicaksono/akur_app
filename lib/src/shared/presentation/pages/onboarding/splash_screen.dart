@@ -1,13 +1,17 @@
 part of '../../pages.dart';
 
 class SplashScreenPage extends StatefulWidget {
+  const SplashScreenPage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _SplashScreenPageState createState() => _SplashScreenPageState();
 }
 
 class _SplashScreenPageState extends State<SplashScreenPage> {
   final AppPreferences _preferences = AppPreferences();
 
+  @override
   void initState() {
     super.initState();
     startSplashScreen();
@@ -20,9 +24,9 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
       final bool isOnBoarding = await _preferences.getOnBoardingState();
       if (isOnBoarding) {
         if (isLogin) {
-          Navigator.pushReplacementNamed(context, Approute.WRAPPER);
+          Navigation.navigateToPageReplacement(Approute.WRAPPER);
         } else {
-          Navigator.pushReplacementNamed(context, Approute.DASHBOARD);
+          Navigation.navigateToPageReplacement(Approute.DASHBOARD);
         }
       } else {
         Navigation.navigateToPageReplacement(Approute.ONBOARDING_ROUTE);
@@ -32,7 +36,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [

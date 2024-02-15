@@ -1,23 +1,49 @@
 import 'package:akur_app/src/core/common/app_styles.dart';
 import 'package:akur_app/src/core/common/navigator.dart';
 import 'package:akur_app/src/core/router/routers.dart';
+import 'package:akur_app/src/shared/bloc/produk/produk_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'firebase_options.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  runApp(MyApp());
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<ProductBloc>(
+          create: (context) => ProductBloc(),
+        ),
+        // Add other BlocProviders if needed
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  // final AuthRepository _authRepository = AuthRepository();
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final ProductBloc productBloc = context.read<ProductBloc>();
+
     return MaterialApp(
       title: 'Akur App',
-      supportedLocales: [
-        const Locale('id'),
-        const Locale('en'),
+      supportedLocales: const [
+        Locale('id'),
+        Locale('en'),
+      ],
+      localizationsDelegates: [
+        // AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
       ],
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
@@ -27,19 +53,22 @@ class MyApp extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(mainBorderRadius))),
           fontFamily: 'Nunito',
-          appBarTheme: AppBarTheme(
+          appBarTheme: const AppBarTheme(
             backgroundColor: mainColor,
             centerTitle: true,
             elevation: 2,
           ),
           primarySwatch: primarySwatch,
           elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(onSurface: Colors.grey[850])),
-          sliderTheme: SliderThemeData(),
+              style: ElevatedButton.styleFrom(
+                  disabledForegroundColor: Colors.grey[850]?.withOpacity(0.38),
+                  disabledBackgroundColor:
+                      Colors.grey[850]?.withOpacity(0.12))),
+          sliderTheme: const SliderThemeData(),
           scaffoldBackgroundColor: backgroundGrey,
           floatingActionButtonTheme:
-              FloatingActionButtonThemeData(backgroundColor: mainColor),
-          tabBarTheme: TabBarTheme(
+              const FloatingActionButtonThemeData(backgroundColor: mainColor),
+          tabBarTheme: const TabBarTheme(
               labelPadding: EdgeInsets.symmetric(horizontal: 20),
               labelColor: mainColor,
               labelStyle:
@@ -47,14 +76,14 @@ class MyApp extends StatelessWidget {
               unselectedLabelColor: Colors.black,
               unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600)),
           visualDensity: VisualDensity.adaptivePlatformDensity,
-          iconTheme: IconThemeData(color: Colors.grey)),
+          iconTheme: const IconThemeData(color: Colors.grey)),
       initialRoute: '/',
       routes: AppRouter.getRoutes(),
     );
   }
 }
 
-Map<int, Color> color = {
+Map<int, Color> color = const {
   50: Color.fromRGBO(32, 48, 114, .1),
   100: Color.fromRGBO(32, 48, 114, .2),
   200: Color.fromRGBO(32, 48, 114, .3),

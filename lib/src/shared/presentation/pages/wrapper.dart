@@ -1,7 +1,10 @@
 part of '../pages.dart';
 
 class Wrapper extends StatefulWidget {
+  const Wrapper({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _WrapperState createState() => _WrapperState();
 }
 
@@ -17,7 +20,6 @@ class _WrapperState extends State<Wrapper> {
   void checkUserLogin() async {
     final bool isLoggedIn = await _pref.getLoginState();
     final bool isOnBoarding = await _pref.getOnBoardingState();
-    print("test: $isOnBoarding  test2 : $isLoggedIn");
 
     if (isOnBoarding) {
       if (isLoggedIn) {

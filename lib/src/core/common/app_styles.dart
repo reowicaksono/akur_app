@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Map<int, Color> color = {
+Map<int, Color> color = const {
   50: Color.fromRGBO(32, 48, 114, .1),
   100: Color.fromRGBO(32, 48, 114, .2),
   200: Color.fromRGBO(32, 48, 114, .3),
@@ -20,12 +20,12 @@ const Color secondaryColor = Color(0xFF0D90F3);
 const Color mainYellow = Color(0xFFFEDF02);
 const Color skyBlue = Color(0xFF456FE7);
 const Color mainOrange = Color(0xFFFFAA33);
-Color mainGreen = Color(0xFF219653);
-Color lightGreen = Color(0xFF59C633);
-Color darkGrey = Color(0xFF686868);
-Color backgroundGrey = Color(0xFFF9F9F9);
+Color mainGreen = const Color(0xFF219653);
+Color lightGreen = const Color(0xFF59C633);
+Color darkGrey = const Color(0xFF686868);
+Color backgroundGrey = const Color(0xFFF9F9F9);
 const Color lightGrey = Color(0xFFF5F5F5);
-Color buttonRequest = Color(0xFFD3D4E2);
+Color buttonRequest = const Color(0xFFD3D4E2);
 const Color redColor = Color(0xFFEB5757);
 const Color whiteColor = Color(0xFFFFFFFF);
 const Color purpleColor = Color.fromARGB(255, 82, 82, 243);
@@ -44,11 +44,15 @@ const double edge = 24.0;
 
 String fontFamily = 'Nunito';
 
+// ignore: non_constant_identifier_names
 TextStyle BlackText =
     GoogleFonts.poppins(fontWeight: FontWeight.w500, color: blackColor);
+// ignore: non_constant_identifier_names
 TextStyle BlueText =
     GoogleFonts.poppins(fontWeight: FontWeight.w500, color: skyBlue);
+// ignore: non_constant_identifier_names
 TextStyle WhiteText =
     GoogleFonts.roboto(fontWeight: FontWeight.w500, color: whiteColor);
+// ignore: non_constant_identifier_names
 TextStyle GreyText =
     GoogleFonts.roboto(fontWeight: FontWeight.w500, color: darkGrey);

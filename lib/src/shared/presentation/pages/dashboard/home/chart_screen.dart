@@ -1,6 +1,8 @@
 part of '../../../pages.dart';
 
 class ChartScreen extends StatefulWidget {
+  const ChartScreen({super.key});
+
   @override
   State<ChartScreen> createState() => _ChartScreenState();
 }

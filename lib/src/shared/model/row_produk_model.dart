@@ -1,15 +1,14 @@
 class RowProduk {
   RowProduk(
-    this.valueA,
-    this.valueB,
-    this.valueC,
-    this.valueD,
+    this.name,
+    this.price,
+    this.quantity,
+    this.description,
   );
-
-  final String valueA;
-  final String valueB;
-  final String valueC;
-  final int valueD;
+  final String name;
+  final double price;
+  final int quantity;
+  final String description;
 
   bool selected = false;
 }

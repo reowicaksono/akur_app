@@ -23,10 +23,10 @@ class DashboardWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             color: Colors.white,
           ),
-          child: Column(children: [
+          child: ListView(children: [
             Padding(
               padding: const EdgeInsets.only(top: 24.0),
-              child: Container(
+              child: SizedBox(
                 height: 100,
                 width: 100,
                 child: Icon(
@@ -36,7 +36,7 @@ class DashboardWidget extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Padding(
@@ -50,7 +50,7 @@ class DashboardWidget extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Padding(

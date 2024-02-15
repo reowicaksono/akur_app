@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "911639561203",
+    "project_id": "akurapp-e5666",
+    "storage_bucket": "akurapp-e5666.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911639561203:android:9a9ab9426ad868b8008886",
+        "android_client_info": {
+          "package_name": "com.example.akur_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8NsIu1YcMaeo5TCHw0E0Y0Z2m99xN2o4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

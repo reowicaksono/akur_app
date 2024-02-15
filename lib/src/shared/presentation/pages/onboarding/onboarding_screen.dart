@@ -1,7 +1,10 @@
 part of '../../pages.dart';
 
 class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _OnboardingScreenState createState() => _OnboardingScreenState();
 }
 
@@ -9,17 +12,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final AppPreferences _preferences = AppPreferences();
   final PageController _pageController = PageController();
   final List<Widget> pages = [
-    OnboardingPage(
+    const OnboardingPage(
       title: 'Welcome to MyApp',
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
       imageUrl: 'assets/lottie/book.json',
     ),
-    OnboardingPage(
+    const OnboardingPage(
       title: 'Explore Features',
       description: 'Discover amazing features that make MyApp unique.',
       imageUrl: 'assets/lottie/quiz.json',
     ),
-    OnboardingPage(
+    const OnboardingPage(
       title: 'Get Started',
       description: 'Sign up now and start using MyApp today!',
       imageUrl: 'assets/lottie/welcome.json',
@@ -47,7 +50,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               },
             ),
           ),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
           if (currentPage < pages.length - 1)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,20 +59,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ElevatedButton(
                     onPressed: () {
                       _pageController.previousPage(
-                        duration: Duration(milliseconds: 500),
+                        duration: const Duration(milliseconds: 500),
                         curve: Curves.ease,
                       );
                     },
-                    child: Text('Back'),
+                    child: const Text('Back'),
                   ),
                 ElevatedButton(
                   onPressed: () {
                     _pageController.nextPage(
-                      duration: Duration(milliseconds: 500),
+                      duration: const Duration(milliseconds: 500),
                       curve: Curves.ease,
                     );
                   },
-                  child: Text('Next'),
+                  child: const Text('Next'),
                 ),
               ],
             ),
@@ -81,7 +84,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 });
                 Navigation.navigateToPageReplacement(Approute.DASHBOARD);
               },
-              child: Text('Mulai'),
+              child: const Text('Mulai'),
             ),
         ],
       ),
@@ -94,7 +97,8 @@ class OnboardingPage extends StatelessWidget {
   final String description;
   final String imageUrl;
 
-  OnboardingPage({
+  const OnboardingPage({
+    super.key,
     required this.title,
     required this.description,
     required this.imageUrl,
@@ -103,7 +107,7 @@ class OnboardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -111,16 +115,16 @@ class OnboardingPage extends StatelessWidget {
             imageUrl,
             height: 200,
           ),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
           Text(
             title,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Text(
             description,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
         ],
       ),

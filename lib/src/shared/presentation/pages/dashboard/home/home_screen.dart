@@ -11,12 +11,8 @@ class HomeScreen extends StatelessWidget {
         "Liat Produk Tabel produk anda di sini", () {
       Navigation.navigateToPage(Approute.PRODUK_TABLE);
     }),
-    DashboardWidgetData(Icons.abc, "Graph 3", "Description 3", () {
-      print("Navigate to Graph 3 page");
-    }),
-    DashboardWidgetData(Icons.abc, "Graph 4", "Description 4", () {
-      print("Navigate to Graph 4 page");
-    }),
+    DashboardWidgetData(Icons.abc, "Graph 3", "Description 3", () {}),
+    DashboardWidgetData(Icons.abc, "Graph 4", "Description 4", () {}),
   ];
 
   @override
@@ -31,14 +27,15 @@ class HomeScreen extends StatelessWidget {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: _buildTopBar(),
-              titlePadding: EdgeInsets.only(left: 0),
+              titlePadding: const EdgeInsets.only(left: 0),
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: edge, vertical: edge),
+            padding:
+                const EdgeInsets.symmetric(horizontal: edge, vertical: edge),
             sliver: SliverList(
               delegate: SliverChildListDelegate(
-                [SizedBox(height: 10), _buildCourseGrid()],
+                [const SizedBox(height: 10), _buildCourseGrid()],
               ),
             ),
           ),
@@ -49,7 +46,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildTopBar() {
     return ListTile(
-      leading: CircleAvatar(
+      leading: const CircleAvatar(
         maxRadius: 30,
         backgroundColor: Colors.transparent,
         backgroundImage: AssetImage("assets/images/Memoji.png"),
@@ -64,7 +61,7 @@ class HomeScreen extends StatelessWidget {
             'Class ',
             style: BlackText,
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Text(
             '8',
             style: BlackText,
@@ -73,7 +70,7 @@ class HomeScreen extends StatelessWidget {
       ),
       trailing: IconButton(
         onPressed: () {},
-        icon: Icon(
+        icon: const Icon(
           Icons.notification_add,
           color: Colors.yellow,
         ),
@@ -84,8 +81,8 @@ class HomeScreen extends StatelessWidget {
   Widget _buildCourseGrid() {
     return GridView.builder(
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 0.8,
         crossAxisSpacing: 10,
