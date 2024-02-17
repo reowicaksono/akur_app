@@ -19,13 +19,15 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<AddProduct>((event, emit) async {
       try {
         emit(ProductLoading());
-        print("test");
         await productService.addProduct(
+          id: event.rowProduk.id,
           name: event.rowProduk.name,
           price: event.rowProduk.price,
           quantity: event.rowProduk.quantity,
           description: event.rowProduk.description,
         );
+        final List<RowProduk> products = await productService.getAllProducts();
+        emit(ProductsLoaded(products: products));
       } catch (e) {
         emit(ProductAddedFailure(error: e.toString()));
       }
@@ -37,6 +39,30 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         final List<RowProduk> products = await productService.getAllProducts();
         emit(ProductsLoaded(products: products));
       } catch (e) {}
+    });
+    on<DeleteProduct>((event, emit) async {
+      try {
+        await productService.deteleById(event.uuid);
+        emit(ProductLoading());
+        final List<RowProduk> products = await productService.getAllProducts();
+        emit(ProductsLoaded(products: products));
+      } catch (e) {}
+    });
+    on<UpdateProduct>((event, emit) async {
+      try {
+        emit(ProductLoading());
+        await productService.addProduct(
+          id: event.rowProduk.id,
+          name: event.rowProduk.name,
+          price: event.rowProduk.price,
+          quantity: event.rowProduk.quantity,
+          description: event.rowProduk.description,
+        );
+        final List<RowProduk> products = await productService.getAllProducts();
+        emit(ProductsLoaded(products: products));
+      } catch (e) {
+        emit(ProductAddedFailure(error: e.toString()));
+      }
     });
   }
 
@@ -53,6 +79,20 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     } else if (event is AddProduct) {
       try {
         await productService.addProduct(
+          id: event.rowProduk.id,
+          name: event.rowProduk.name,
+          price: event.rowProduk.price,
+          quantity: event.rowProduk.quantity,
+          description: event.rowProduk.description,
+        );
+        yield ProductAddedSuccess();
+      } catch (e) {
+        yield ProductAddedFailure(error: e.toString());
+      }
+    } else if (event is UpdateProduct) {
+      try {
+        await productService.updateProduct(
+          id: event.rowProduk.id,
           name: event.rowProduk.name,
           price: event.rowProduk.price,
           quantity: event.rowProduk.quantity,

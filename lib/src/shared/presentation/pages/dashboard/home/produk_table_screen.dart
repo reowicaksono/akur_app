@@ -12,6 +12,7 @@ class _ProdukDataTableScreenState extends State<ProdukDataTableScreen> {
   late String s = "";
   final _formKey = GlobalKey<FormState>();
   late ProductBloc productBloc = ProductBloc();
+  String uuid = const Uuid().v4();
 
   final TextEditingController _nameProduct = TextEditingController();
   final TextEditingController _priceProduct = TextEditingController();
@@ -27,6 +28,10 @@ class _ProdukDataTableScreenState extends State<ProdukDataTableScreen> {
 
   Future<void> _refresh() async {
     productBloc.add(GetAllProducts());
+    _nameProduct.clear();
+    _priceProduct.clear();
+    _quantityProduct.clear();
+    _descriptionProduct.clear();
   }
 
   @override
@@ -37,158 +42,48 @@ class _ProdukDataTableScreenState extends State<ProdukDataTableScreen> {
         shadowColor: Colors.black,
         title: Text("Table Produk Akur", style: BlackText),
       ),
-      body: BlocBuilder<ProductBloc, ProductState>(
-        builder: (context, state) {
-          print("object : $state");
-          if (state is ProductLoading) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (state is ProductsLoaded) {
-            return _buildDataTable(state.products, state);
-          } else {
-            return Center(
-              child: Text("Not Found"),
-            );
-          }
-        },
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: StreamBuilder<ProductState>(
+          stream: BlocProvider.of<ProductBloc>(context).stream,
+          builder: (context, snapshot) {
+            final state = snapshot.data;
+
+            if (state is ProductLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is ProductsLoaded) {
+              if (state.products.isEmpty) {
+                return Center(child: Text("No Found Data Please Ad"));
+              }
+              return _buildDataTable(state.products, state);
+            } else {
+              return const Center(
+                child: Text("Not Found"),
+              );
+            }
+          },
+        ),
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
+            heroTag: 'add_data',
             backgroundColor: redColor,
             onPressed: () async {
               await showDialog<void>(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        content: Stack(
-                          clipBehavior: Clip.none,
-                          children: <Widget>[
-                            Positioned(
-                              right: -40,
-                              top: -40,
-                              child: InkResponse(
-                                onTap: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const CircleAvatar(
-                                  backgroundColor: Colors.red,
-                                  child: Icon(Icons.close),
-                                ),
-                              ),
-                            ),
-                            SingleChildScrollView(
-                              child: Form(
-                                key: _formKey,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: TextFormField(
-                                          decoration: InputDecoration(
-                                              hintText: "Nama Produk",
-                                              hintStyle: GreyText.copyWith(
-                                                  fontWeight: FontWeight.w200)),
-                                          controller: _nameProduct,
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return 'Please enter some text';
-                                            }
-                                          }),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: TextFormField(
-                                          keyboardType: TextInputType.number,
-                                          decoration: InputDecoration(
-                                              hintText: "Rp.",
-                                              hintStyle: GreyText.copyWith(
-                                                  fontWeight: FontWeight.w200)),
-                                          controller: _priceProduct,
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return 'Please enter some price';
-                                            }
-                                          }),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: TextFormField(
-                                          keyboardType: TextInputType.number,
-                                          decoration: InputDecoration(
-                                              hintText: "Total Produk",
-                                              hintStyle: GreyText.copyWith(
-                                                  fontWeight: FontWeight.w200)),
-                                          controller: _quantityProduct,
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return 'Please enter some qty';
-                                            }
-                                          }),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: TextFormField(
-                                          decoration: InputDecoration(
-                                              hintText: "Deskripsi",
-                                              hintStyle: GreyText.copyWith(
-                                                  fontWeight: FontWeight.w200)),
-                                          controller: _descriptionProduct,
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return 'Please enter some description';
-                                            }
-                                          }),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: ElevatedButton(
-                                        child: const Text('Submit'),
-                                        onPressed: () {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            productBloc.add(AddProduct(
-                                              rowProduk: RowProduk(
-                                                _nameProduct.value.text,
-                                                double.parse(
-                                                    _priceProduct.value.text),
-                                                int.parse(_quantityProduct
-                                                    .value.text),
-                                                _descriptionProduct.value.text,
-                                              ),
-                                              description: '',
-                                            ));
-
-                                            _nameProduct.clear();
-                                            _priceProduct.clear();
-                                            _quantityProduct.clear();
-                                            _descriptionProduct.clear();
-
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                    'Product added successfully!'),
-                                              ),
-                                            );
-                                            FocusScope.of(context).unfocus();
-                                            Timer(Duration(seconds: 5), () {
-                                              Navigation.navigateBack();
-                                            });
-                                          }
-                                        },
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ));
+                context: context,
+                builder: (context) => AddDialog(
+                  isUpdate: false,
+                  uuid: uuid,
+                  onAddProduct: (rowProduk, description) {
+                    productBloc.add(AddProduct(
+                        rowProduk: rowProduk, description: description));
+                  },
+                ),
+              );
             },
             child: const Icon(
               Icons.add,
@@ -199,9 +94,9 @@ class _ProdukDataTableScreenState extends State<ProdukDataTableScreen> {
             width: 10,
           ),
           FloatingActionButton(
+            heroTag: 'add_data_image',
             backgroundColor: redColor,
             onPressed: () async {
-              // User chooses between gallery and camera
               final XFile? image = await showDialog(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
@@ -233,10 +128,8 @@ class _ProdukDataTableScreenState extends State<ProdukDataTableScreen> {
               );
 
               if (image != null) {
-                // Apply image enhancement/scanning (you may replace this with your image processing logic)
                 final enhancedImage = await enhanceImage(image);
 
-                // Process the enhanced image to text
                 String result = await getImageTotext(enhancedImage!.path);
 
                 setState(() {
@@ -258,24 +151,28 @@ class _ProdukDataTableScreenState extends State<ProdukDataTableScreen> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        if (state is ProductLoading) // Show loading indicator
+        if (state is ProductLoading)
           Center(
             child: CircularProgressIndicator(),
           )
-        else if (state
-            is ProductsLoaded) // Show data table when products are loaded
+        else if (state is ProductsLoaded)
           PaginatedDataTable(
-            rowsPerPage: 8,
+            rowsPerPage: 6,
             columns: const [
-              DataColumn(label: Text('Header A')),
-              DataColumn(label: Text('Header B')),
-              DataColumn(label: Text('Header C')),
-              DataColumn(label: Text('Header D')),
+              DataColumn(label: Text('Nama Produk')),
+              DataColumn(label: Text('Harga')),
+              DataColumn(label: Text('Total Produk')),
+              DataColumn(label: Text('Deskripsi')),
+              DataColumn(label: Text('Action')),
             ],
-            source: _DataSource(products),
+            source: DataSource(products, context, () {
+              setState(() {
+                _refresh();
+              });
+            }),
           )
-        else // Show an error message if something went wrong
-          Center(
+        else
+          const Center(
             child: Text("Not Found"),
           ),
         Text(
@@ -295,51 +192,6 @@ class _ProdukDataTableScreenState extends State<ProdukDataTableScreen> {
   }
 
   Future<XFile?> enhanceImage(XFile image) async {
-    // Implement image enhancement logic here
-    // You may use image processing libraries or apply your custom logic
-    // For simplicity, return the original image for now
     return image;
   }
-}
-
-class _DataSource extends DataTableSource {
-  _DataSource(this._rows);
-
-  final List<RowProduk> _rows;
-
-  int _selectedCount = 0;
-
-  @override
-  DataRow? getRow(int index) {
-    assert(index >= 0);
-    if (index >= _rows.length) return null;
-    final row = _rows[index];
-    return DataRow.byIndex(
-      index: index,
-      selected: row.selected,
-      onSelectChanged: (value) {
-        if (row.selected != value) {
-          _selectedCount += value! ? 1 : -1;
-          assert(_selectedCount >= 0);
-          row.selected = value;
-          notifyListeners();
-        }
-      },
-      cells: [
-        DataCell(Text(row.name)),
-        DataCell(Text(row.price.toString())),
-        DataCell(Text(row.quantity.toString())),
-        DataCell(Text(row.description)),
-      ],
-    );
-  }
-
-  @override
-  int get rowCount => _rows.length;
-
-  @override
-  bool get isRowCountApproximate => false;
-
-  @override
-  int get selectedRowCount => _selectedCount;
 }
